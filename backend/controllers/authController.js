@@ -15,7 +15,7 @@ const { SECRET_KEY, REFRESH_SECRET_KEY, PORT } = process.env;
 
 //auth/register
 const signupUser = async (req, res) => {
-  const { name, email, password, } = req.body;
+  const { name, email, password } = req.body;
 
   const { error } = signupValidation.validate(req.body);
   if (error) {
@@ -44,8 +44,8 @@ const signupUser = async (req, res) => {
 
   await sendEmail({
     to: email,
-    subject: "Action Required: Verify Your Email",
-    html: `<a target="_blank" href="http://localhost:${PORT}/api/users/verify/${verificationToken}">Click to verify email</a>`,
+    subject: "Action Required: Please Verify Your Email",
+    html: `<a target="_blank" href="http://localhost:${PORT}/api/users/verify/${verificationToken}">Click to verify your email</a>`,
   });
 
   res.status(201).json({
@@ -87,8 +87,10 @@ const loginUser = async (req, res) => {
 
   const payload = { id: user._id };
   const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: "30d" });
-  const sid = uuid4();// Generate a new session ID
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: "30d",
+  });
+  const sid = uuid4(); // Generate a new session ID
 
   // Update user with new tokens and session ID
   await User.findByIdAndUpdate(user._id, { token: accessToken, sid });
@@ -123,17 +125,18 @@ const refreshTokens = async (req, res) => {
   if (!sid) {
     throw httpError(400, "No token provided");
   }
-
   // Find the user by sid
   const user = await User.findOne({ sid });
   if (!user) {
     throw httpError(401, "Unauthorized");
   }
-
   // Generate new tokens
-  const accessToken = jwt.sign({ uid: user._id, sid }, SECRET_KEY, { expiresIn: "1h" });
-  const refreshToken = jwt.sign({ uid: user._id, sid }, REFRESH_SECRET_KEY, { expiresIn: "30d" });
-
+  const accessToken = jwt.sign({ uid: user._id, sid }, SECRET_KEY, {
+    expiresIn: "1h",
+  });
+  const refreshToken = jwt.sign({ uid: user._id, sid }, REFRESH_SECRET_KEY, {
+    expiresIn: "30d",
+  });
   // Send the response
   res.json({ accessToken, refreshToken, sid });
 };
