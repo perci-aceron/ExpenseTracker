@@ -3,6 +3,7 @@ import logger from "morgan";
 import cors from "cors"
 
 import authRouter from "./routes/api/authRouter.js";
+import usersRouter from "./routes/api/usersRouter.js";
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
@@ -23,3 +25,7 @@ app.use((err, req, res, next) => {
 })
 
 export { app };
+
+
+//TO DO 
+//../../helpers/sendEmail.js edit for all email types

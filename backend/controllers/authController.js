@@ -2,12 +2,8 @@ import bcrypt from "bcryptjs";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import Jimp from "jimp";
-import path from "path";
-import fs from "fs/promises";
 import { User } from "../models/usersModel.js";
 import {
-  emailValidation,
   signupValidation,
   loginValidation,
 } from "../validations/validation.js";
@@ -142,89 +138,4 @@ const refreshTokens = async (req, res) => {
   res.json({ accessToken, refreshToken, sid });
 };
 
-const getCurrentUsers = async (req, res) => {
-  const { email, subscription } = req.user;
-
-  res.json({
-    email,
-    subscription,
-  });
-};
-
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: oldPath, originalname } = req.file;
-
-  await Jimp.read(oldPath).then((image) =>
-    image.cover(250, 250).write(oldPath)
-  );
-
-  const extension = path.extname(originalname);
-  const filename = `${_id}${extension}`;
-
-  const newPath = path.join("public", "avatars", filename);
-  await fs.rename(oldPath, newPath);
-
-  let avatarURL = path.join("/avatars", filename);
-  avatarURL = avatarURL.replace(/\\/g, "/");
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  res.status(200).json({ avatarURL });
-};
-
-const verifyEmail = async (req, res) => {
-  const { verificationToken } = req.params;
-
-  const user = await User.findOne({ verificationToken });
-
-  if (!user) {
-    throw httpError(400, "User not found");
-  }
-
-  await User.findByIdAndUpdate(user._id, {
-    verify: true,
-    verificationToken: null,
-  });
-
-  res.json({
-    message: "Verification successful",
-  });
-};
-
-const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
-
-  const { error } = emailValidation.validate(req.body);
-  if (error) {
-    throw httpError(400, error.message);
-  }
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw httpError(404, "The provided email address could not be found");
-  }
-
-  if (user.verify) {
-    throw httpError(400, "Verification has already been passed");
-  }
-
-  await sendEmail({
-    to: email,
-    subject: "Action Required: Verify Your Email",
-    html: `<a target="_blank" href="http://localhost:${PORT}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
-  });
-
-  res.json({ message: "Verification email sent" });
-};
-
-export {
-  signupUser,
-  loginUser,
-  logoutUser,
-  getCurrentUsers,
-  updateAvatar,
-  verifyEmail,
-  resendVerifyEmail,
-  refreshTokens
-};
+export { signupUser, loginUser, logoutUser, refreshTokens };
