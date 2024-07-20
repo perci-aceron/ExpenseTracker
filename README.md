@@ -1,2 +1,2 @@
 # ExpenseTracker
- web app for tracking expenses
+ web app for tracking expenses, coz mo money, mo problems
