@@ -5,6 +5,7 @@ import cors from "cors"
 import authRouter from "./routes/api/authRouter.js";
 import usersRouter from "./routes/api/usersRouter.js";
 import categoryRouter from "./routes/api/categoryRouter.js";
+import transactionRouter from "./routes/api/transactionRouter.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/transactions", transactionRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

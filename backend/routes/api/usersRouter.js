@@ -8,7 +8,7 @@ import {
   verifyEmail,
   resendVerifyEmail
 } from "../../controllers/usersController.js";
-import { authenticateToken } from "../../middleWares/authenticateToken.js";
+import { authenticateToken } from "../../middlewares/authenticateToken.js";
 import { upload } from "../../middlewares/upload.js";
 
 const router = express.Router();
