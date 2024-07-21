@@ -6,7 +6,7 @@ import {
   logoutUser,
   refreshTokens,
 } from "../../controllers/authController.js";
-import { authenticateToken } from "../../middleWares/authenticateToken.js";
+import { authenticateToken } from "../../middlewares/authenticateToken.js";
 
 const router = express.Router();
 

@@ -1,4 +1,5 @@
 import { User } from "../models/usersModel.js";
+import { Category } from "../models/categoryModel.js";
 import { httpError } from "../helpers/httpError.js";
 import mongoose from "mongoose";
 
