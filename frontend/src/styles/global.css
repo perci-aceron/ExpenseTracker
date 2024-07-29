@@ -2,7 +2,7 @@
 :root {
     --primary-color: #3498db;
     --secondary-color: #2ecc71;
-    --font-family: "SuisseIntl";
+    --font-family: "SuisseIntl-Regular";
     /* Add other variables as needed */
   }
   
@@ -11,10 +11,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box
-  }
-  @font-face {
-    font-family: "SuisseIntl";
-    src: url("../assets/fonts/SuisseIntl.ttf");
   }
   @media (max-width: 1440px) {
     /* Styles for desktop */

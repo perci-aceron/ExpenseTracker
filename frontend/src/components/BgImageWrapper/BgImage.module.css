@@ -1,0 +1,27 @@
+.bg-image-wrapper {
+    position: relative;
+    background-image: url('path-to-background-image'); /* Set your background image */
+    background-size: cover;
+    background-position: center;
+    /* Add other styles as needed */
+  }
+  
+  .decoration-tab {
+    position: absolute;
+    /* Add styles for dynamic movement, bouncing, etc. */
+    /* Example placeholder styles */
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: moveTab 4s infinite;
+  }
+  
+  @keyframes moveTab {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(50px, 50px); }
+    50% { transform: translate(0, 100px); }
+    75% { transform: translate(-50px, 50px); }
+    100% { transform: translate(0, 0); }
+  }
+  

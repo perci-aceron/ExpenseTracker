@@ -1,14 +1,12 @@
-// src/components/PrivateRoute.js
-import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContexts.js';
+// src/routes/PrivateRoute.js
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const PrivateRoute = ({ element }) => {
-  const { user, loading } = useContext(UserContext);
-
-  if (loading) return <div>Loading...</div>; // Or a loading spinner
-
-  return user ? element : <Navigate to="/login" />;
+const PrivateRoute = ({ element: Element, ...rest }) => {
+  const token = useSelector((state) => state.auth.token);
+  
+  return token ? <Element {...rest} /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

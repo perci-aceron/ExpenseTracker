@@ -1,6 +1,6 @@
 import express from "express";
 import { ctrlWrapper } from "../../helpers/ctrlWrapper.js";
-import { authenticateToken } from "../../middlewares/authenticateToken.js";
+import authenticateToken from "../../middlewares/authenticateToken.js";
 import {
   createTransaction,
   getTransactionsByTypeAndDate,

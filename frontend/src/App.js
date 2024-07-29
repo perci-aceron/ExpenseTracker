@@ -1,31 +1,28 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SharedLayout from './components/SharedLayout.js';
-import Profile from '../src/pages/Profile.js';
-import NotFound from '../src/pages/NotFound.js';
-import PrivateRoute from '../src/routes/PrivateRoute.js';
-// import BgImageWrapper from './components/BgImageWrapper.js';
-// import Header from './components/Header.js';
-
-const Home = () => <div>Home Page</div>; // Placeholder
-const Login = () => <div>Login Page</div>; // Placeholder
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import SharedLayout from './components/SharedLayoutComponent';
+import Home from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import NotFound from './pages/NotFoundPage';
+// import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<SharedLayout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route
-            path="profile"
-            element={<PrivateRoute component={Profile} />}
-          />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<SharedLayout />}>
+            <Route index element={<PublicRoute element={Home} />} />
+            <Route path="login" element={<PublicRoute element={LoginPage} />} />
+            {/* <Route path="info" element={<PrivateRoute element={Profile} />} /> */}
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 

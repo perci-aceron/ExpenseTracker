@@ -14,18 +14,23 @@ const getGravatarUrl = (email) => gravatar.url(email, { protocol: "http" });
 
 //users/current
 const getCurrentUsers = async (req, res) => {
-  const { _id, name, email, avatarURL, currency, categories, transactionsTotal } = req.user;
-  const gravatarURL = getGravatarUrl(email);
+  try {
+    const { _id, name, email, avatarURL, currency, categories, transactionsTotal } = req.user;
+    const gravatarURL = getGravatarUrl(email);
 
-  res.json({
-    _id,
-    name: name || "No name provided",
-    email,
-    avatarURL: avatarURL || gravatarURL,
-    currency,
-    categories,
-    transactionsTotal
-  });
+    res.json({
+      _id,
+      name: name || "No name provided",
+      email,
+      avatarURL: avatarURL || gravatarURL,
+      currency,
+      categories,
+      transactionsTotal
+    });
+  } catch (error) {
+    console.error("Error fetching current user:", error); // Log the error
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 //users/info
 const updateUserInfo = async (req, res) => {

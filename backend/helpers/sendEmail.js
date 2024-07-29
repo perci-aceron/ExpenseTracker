@@ -1,7 +1,9 @@
+// sendEmail.js
 import nodemailer from "nodemailer";
 import "dotenv/config";
+import mockSendEmail from "./mockSendEmail.js";
 
-const { GMAIL_EMAIL, GMAIL_PASSWORD } = process.env;
+const { GMAIL_EMAIL, GMAIL_PASSWORD, USE_MOCK_EMAIL } = process.env;
 
 const nodemailerConfig = {
   service: "Gmail",
@@ -17,8 +19,12 @@ const nodemailerConfig = {
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: GMAIL_EMAIL };
-  await transport.sendMail(email);
+  if (USE_MOCK_EMAIL === "true") {
+    await mockSendEmail(data);
+  } else {
+    const email = { ...data, from: GMAIL_EMAIL };
+    await transport.sendMail(email);
+  }
 };
 
 export { sendEmail };

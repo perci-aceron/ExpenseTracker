@@ -1,6 +1,5 @@
-// src/contexts/UserContext.js
-import React, { createContext, useState, useEffect } from 'react';
-import api from 'api/axios';
+import React, { createContext, useState, useEffect } from "react";
+import axiosInstance from "api/axios";
 
 export const UserContext = createContext();
 
@@ -10,11 +9,29 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("User not logged in");
+        setLoading(false);
+        return;
+      } else {
+        console.log("Token found:", token);
+      }
+
       try {
-        const response = await api.get('/api/current'); // Adjust the API endpoint as needed
+        const response = await axiosInstance.get("/users/current");
         setUser(response.data);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        console.error("Failed to fetch user:", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
+        } else if (error.request) {
+          console.error("Request data:", error.request);
+        } else {
+          console.error("Error message:", error.message);
+        }
       } finally {
         setLoading(false);
       }

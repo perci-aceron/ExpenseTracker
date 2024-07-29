@@ -1,30 +1,19 @@
+// Example authentication middleware
 import jwt from "jsonwebtoken";
 import { User } from "../models/usersModel.js";
-import { httpError } from "../helpers/httpError.js";
-import "dotenv/config";
-const { SECRET_KEY } = process.env;
 
-const authenticateToken = async (req, _res, next) => {
-  const { authorization = "" } = req.headers;
-  const [bearer, token] = authorization.split(" ");
-
-  if (bearer !== "Bearer") {
-    next(httpError(401, "Not authorized"));
+const authenticateToken = (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Not authorized" });
   }
-
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
-    const user = await User.findById(id);
-
-    if (!user || user.token !== token || !user.token) {
-      next(httpError(401, "Not authorized"));
-    }
-
-    req.user = user;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  } catch {
-    next(httpError(401, "Not authorized"));
+  } catch (err) {
+    return res.status(401).json({ message: "Not authorized" });
   }
 };
 
-export { authenticateToken };
+export default authenticateToken;

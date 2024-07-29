@@ -14,6 +14,8 @@ import { v4 as uuid4 } from "uuid";
 const { SECRET_KEY, REFRESH_SECRET_KEY, PORT } = process.env;
 
 //auth/register
+// POST http://localhost:3001/api/auth/register
+// body: { "name": "Bob", "email": "user@example.com", "password": "qwer1234"}
 const signupUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -67,6 +69,8 @@ const signupUser = async (req, res) => {
   });
 };
 //auth/login
+//POST http://localhost:3001/api/auth/login
+//body: { "email": "user@example.com", "password": "qwer1234" }
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -111,6 +115,8 @@ const loginUser = async (req, res) => {
   });
 };
 //auth/logout
+//GET http://localhost:3001/api/auth/logout
+//Headers: Authorization, Bearer (token)
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
 
@@ -119,6 +125,8 @@ const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 //auth/refresh
+//POST http://localhost:3001/api/auth/refresh
+//body: { "sid": "c0a32f6f-1aba-46cd-a645-97e0104eab5d" }
 const refreshTokens = async (req, res) => {
   const { sid } = req.body;
 
